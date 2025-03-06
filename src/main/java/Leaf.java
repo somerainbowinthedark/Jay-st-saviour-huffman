@@ -1,6 +1,9 @@
 public class Leaf extends Node {
     private char character;
-
+    public Leaf(char character, int frequency){
+        super(frequency);
+        this.character = character;
+    }
     /*
      * TODO
      * The Leaf class should have a constructor which accepts a char character and an int frequency.
