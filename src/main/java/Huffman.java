@@ -25,6 +25,17 @@ public class Huffman {
         
         frequencies = new HashMap<>();
 
+        for(int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            // if we see new char
+            if(stuff.get(c) == null){
+                stuff.put(c, 1);
+            }else {
+                stuff.put(c, stuff.get(c) + 1);
+            }
+        }
+ 
+
         // TODO 
         // Loop over every char in the text String by using text.toCharArray().
         // If the char does not exist as a key in the frequencies HashMap, create a new entry and set the value to 1.
@@ -38,13 +49,20 @@ public class Huffman {
     public String encode() {
         Queue<Node> queue = new PriorityQueue<>();
 
+        for(Entry<Character, Integer> entry : this.frequencies.entrySet()) {
+            Leaf leaf = new Leaf(entry.getKey(), entry.getValue());
+            queue.add(leaf);
+        }
+
         // TODO
         // For every entry in the frequencies HashMap, create a new Leaf and add it to the queue.
 
         // TODO
         // While the queue's size is greater than 1, create a new Node using the two Nodes with lowest frequencies.
         // HINT: use queue.poll() to get the nodes with lowest frequncies.
-
+        Node first = queue.poll();
+        Node second = queue.poll();
+        queue.add(new Node(first, second));
         // TODO
         // Set the root of the tree equal to the final Node in the queue (the greatest, by definition).
 
