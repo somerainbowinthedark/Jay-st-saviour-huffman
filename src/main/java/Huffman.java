@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -105,7 +106,7 @@ public class Huffman {
         // For every char in the original String text, use the char as a key to obtain a Huffman code from
         // the codes HashMap. Use builder.append() to add the Huffman code to the result String.
        for(char c : text.toCharArray()){
-        builder.append(codes.get(c);)
+        builder.append(codes.get(c));
        }
         return builder.toString();
     }
@@ -133,7 +134,7 @@ public class Huffman {
             }else {
                 current.getRightNode();
             }
-            if(current.getLeftNode() == null && current.getRightNode == null){
+            if(current.getLeftNode() == null && current.getRightNode() == null){
                 current = root;
             }
         }
