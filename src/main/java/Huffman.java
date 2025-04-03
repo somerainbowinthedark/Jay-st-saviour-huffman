@@ -26,13 +26,13 @@ public class Huffman {
         
         frequencies = new HashMap<>();
 
-        for(int i = 0; i < text.length(); i++) {
+        for(char character : text.toCharArray()) {
             char c = text.charAt(i);
             // if we see new char
-            if(frequencies.get(c) == null){
-                frequencies.put(c, 1);
+            if(frequencies.get(character) == null){
+                frequencies.put(character, 0);
             }else {
-                frequencies.put(c, frequencies.get(c) + 1);
+                frequencies.put(character, frequencies.get(character) + 1);
             }
         }
  
@@ -51,8 +51,7 @@ public class Huffman {
         Queue<Node> queue = new PriorityQueue<>();
 
         for(Entry<Character, Integer> entry : frequencies.entrySet()) {
-            Leaf leaf = new Leaf(entry.getKey(), entry.getValue());
-            queue.add(leaf);
+            queue.add(new Leaf(entry.getKey(), entry.getValue()));
         }
 
         // TODO
@@ -61,18 +60,17 @@ public class Huffman {
         // TODO
         // While the queue's size is greater than 1, create a new Node using the two Nodes with lowest frequencies.
         // HINT: use queue.poll() to get the nodes with lowest frequncies.
-        if(queue.size() > 1){ 
-            Node first = queue.poll();
-            Node second = queue.poll();
-            queue.add(new Node(first, second));
+        while(queue.size() > 1){ 
+            Node node = new Node(queue.poll(), queue.poll());
+            queue.add(node);
         }
         // TODO
         // Set the root of the tree equal to the final Node in the queue (the greatest, by definition).
-        root = queue.poll();
+        this.root = queue.poll();
         // TODO
         // Call generateCodes() to populate the codes HashMap by providing the root Node and an empty String
         // for the initial code value.
-        generateCodes(root, "");
+        generateCodes(this.root, "");
         return getEncodedText();
     }
 
@@ -86,14 +84,15 @@ public class Huffman {
         // TODO
         // If the Node is an instance of Leaf, add the Leaf's character as a key in the codes HashMap, the
         // code String as its value, and return.  
-        if(node instanceof Leaf){
-            Leaf key = (Leaf) node;
-            codes.put(key.getCharacter(), code);
+        if(node instanceof Leaf leaf){
+            codes.put(leaf.getCharacter(), code);
             return;
         }
         // TODO
         // Recursively call generateCodes with the left and right Nodes. Add a "0" to the left Node code 
         // and a "1" to the right Node code when making recursive calls.
+        generateCodes(node.getLeftNode(), code.concat("0"));
+        generateCodes(node.getRightNode(), code.concat("1"));
     }
 
     /*
@@ -105,8 +104,8 @@ public class Huffman {
         // TODO
         // For every char in the original String text, use the char as a key to obtain a Huffman code from
         // the codes HashMap. Use builder.append() to add the Huffman code to the result String.
-       for(char c : text.toCharArray()){
-        builder.append(codes.get(c));
+       for(char character : text.toCharArray()){
+        builder.append(codes.get(character));
        }
         return builder.toString();
     }
@@ -127,9 +126,9 @@ public class Huffman {
          *    - Otherwise, navigate right by pointing the current Node to the current's right Node.
          *    - If the current Node is a Leaf, append the character to the StringBuilder and reset current Node to root.
          */
-        for(char ch : encoded.toCharArray()){
+        for(char character : encoded.toCharArray()){
             Node current = root;
-            if(ch == '0'){
+            if(character == '0'){
                 current.getLeftNode();
             }else {
                 current.getRightNode();
